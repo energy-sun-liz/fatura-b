@@ -1091,7 +1091,7 @@
       out.economyPercent.textContent = formatPercent(economyPercent);
     }
 
-    Object.values(fields).forEach((field) => {
+Object.values(fields).forEach((field) => {
       field.addEventListener('input', calculate);
       field.addEventListener('change', calculate);
     });
@@ -1100,7 +1100,16 @@
       out.toast.textContent = 'Simulação processada com sucesso!';
       window.setTimeout(() => { out.toast.textContent = ''; }, 3500);
     });
-    out.legacyPdfButton.addEventListener('click', () => window.print());
+
+    // BOTÃO PDF CORRIGIDO: Garante a visibilidade e chama a impressão nativa
+    out.legacyPdfButton.addEventListener('click', () => {
+      // Força o documento a estar visível antes de mandar imprimir
+      document.documentElement.style.display = "block";
+      setTimeout(() => {
+        window.print();
+      }, 50);
+    });
+
     out.logoUpload.addEventListener('change', (event) => {
       const file = event.target.files && event.target.files[0];
       if (!file) { applyLogo(''); return; }
@@ -1109,6 +1118,7 @@
       reader.readAsDataURL(file);
     });
 
+    // Executa o cálculo inicial assim que a senha é digitada corretamente
     calculate();
   </script>
 </body>
