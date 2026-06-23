@@ -4,6 +4,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Simulador de Fatura</title>
+  <script>
+    // DEFINA A SUA SENHA EXCLUSIVA AQUI ABAIXO:
+    const SENHA_ACESSO = "123456"; 
+
+    function validarAcesso() {
+      let tentativa = prompt("Por favor, introduza o código de acesso para visualizar o Simulador:");
+      
+      if (tentativa === SENHA_ACESSO) {
+        // Se a senha estiver correta, torna o site visível
+        document.documentElement.style.display = "block";
+      } else {
+        // Se estiver errada ou cancelada, bloqueia e avisa
+        alert("Código incorreto! Acesso não autorizado.");
+        document.documentElement.style.display = "none";
+        window.location.reload(); // Recarrega para pedir novamente
+      }
+    }
+
+    // Oculta a página imediatamente antes de carregar o visual
+    document.documentElement.style.display = "none";
+    
+    // Dispara a verificação assim que a estrutura base estiver pronta
+    window.addEventListener("DOMContentLoaded", validarAcesso);
+  </script>
   <style>
     :root {
       color-scheme: light;
