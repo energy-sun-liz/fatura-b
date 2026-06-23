@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Simulador de Fatura</title>
-  <script>
+  <title>Simulador de Fatura GD2 B</title>
+<script>
     // DEFINA A SUA SENHA EXCLUSIVA AQUI ABAIXO:
-    const SENHA_ACESSO = "123456"; 
+    const SENHA_ACESSO = "1234"; 
 
     function validarAcesso() {
       let tentativa = prompt("Por favor, introduza o código de acesso para visualizar o Simulador:");
@@ -16,7 +16,7 @@
         document.documentElement.style.display = "block";
       } else {
         // Se estiver errada ou cancelada, bloqueia e avisa
-        alert("Código incorreto! Acesso não autorizado.");
+        alert("Código incorreto!");
         document.documentElement.style.display = "none";
         window.location.reload(); // Recarrega para pedir novamente
       }
@@ -60,16 +60,20 @@
 
     button, input, select { font: inherit; }
 
-    /* Estrutura de Impressão para repetir cabeçalho e rodapé */
-    .print-layout {
+    /* CAMADA DE PROTEÇÃO DA SENHA */
+    #bloqueio-senha {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      border-collapse: collapse;
-      border: none;
-    }
-    .print-layout th, .print-layout td {
-      padding: 0;
-      border: none;
-      text-align: left;
+      height: 100%;
+      background-color: #12459f;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
     }
 
     .app {
@@ -78,13 +82,7 @@
       padding: 24px 0 38px;
     }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
+    .topbar { display: none; }
 
     .brand {
       display: flex;
@@ -108,7 +106,6 @@
       border-radius: 10px;
       background: #fff;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .logo-box img {
@@ -124,12 +121,12 @@
       margin-bottom: 4px;
       font-size: clamp(1.18rem, 2.2vw, 1.8rem);
       line-height: 1.1;
-      color: var(--brand-blue);
+      letter-spacing: 0;
     }
 
     .subtitle {
       margin-bottom: 0;
-      color: var(--muted);
+      color: #dce7f8;
       font-size: 0.92rem;
     }
 
@@ -174,13 +171,37 @@
       display: grid;
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
       gap: 18px;
+      margin-top: 18px;
       padding: 18px;
-      background: linear-gradient(135deg, rgba(18, 69, 159, 0.96), rgba(18, 69, 159, 0.84));
+      background:
+        linear-gradient(135deg, rgba(18, 69, 159, 0.96), rgba(18, 69, 159, 0.84)),
+        linear-gradient(90deg, #fff, #fff);
       color: #fff;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
       position: relative;
+    }
+
+    .service-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 14px;
+      padding: 14px 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--brand-orange);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .service-title h2 {
+      margin: 0;
+      color: var(--brand-blue);
+      font-size: clamp(1.15rem, 2vw, 1.55rem);
+      letter-spacing: 0;
     }
 
     .proposal-header::after {
@@ -251,7 +272,6 @@
       margin: 0 0 12px;
       font-size: 1rem;
       color: #24324a;
-      font-weight: 700;
     }
 
     .form-grid {
@@ -404,45 +424,44 @@
       gap: 16px;
       min-height: 230px;
       align-items: end;
-      padding: 16px 14px 14px;
+      padding: 16px 14px 0;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(216, 224, 234, 0.4) 1px, transparent 1px) 0 0 / 100% 25%;
+      background: linear-gradient(180deg, rgba(216, 224, 234, 0.62) 1px, transparent 1px) 0 0 / 100% 25%;
     }
 
     .bar-wrap {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: center;
-      height: 100%;
-      gap: 6px;
-    }
-
-    .bar-value {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 2px;
+      display: grid;
+      gap: 8px;
+      align-items: end;
+      height: 196px;
     }
 
     .bar {
-      width: min(100%, 90px);
+      width: min(100%, 112px);
       min-height: 4px;
-      border-radius: 6px 6px 0 0;
+      justify-self: center;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 8px;
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.8rem;
       transition: height 180ms ease;
     }
 
-    .bar.consumption { background: linear-gradient(180deg, #94a3b8, #64748b); }
-    .bar.generation { background: linear-gradient(180deg, var(--brand-orange), #d97706); }
-    .bar.invoice { background: linear-gradient(180deg, #3b82f6, var(--brand-blue)); }
+    .bar.consumption { background: linear-gradient(180deg, var(--brand-orange), #c66d00); }
+    .bar.generation { background: linear-gradient(180deg, #2b66c5, var(--brand-blue)); }
+    .bar.invoice { background: linear-gradient(180deg, var(--brand-orange), #c66d00); }
 
     .bar-label {
+      min-height: 38px;
       text-align: center;
-      font-weight: 700;
+      font-weight: 900;
       color: #35445b;
-      font-size: 0.85rem;
-      margin-top: 4px;
+      font-size: 0.88rem;
     }
 
     .metrics, .summary {
@@ -470,7 +489,7 @@
 
     .metric strong, .summary-item strong { font-size: 1.05rem; }
 
-    .invoice { overflow: hidden; margin-top: 10px; }
+    .invoice { overflow: hidden; }
 
     .invoice-header {
       display: flex;
@@ -512,12 +531,12 @@
       font-size: 1.45rem;
     }
 
-    .invoice-table {
+    table {
       width: 100%;
       border-collapse: collapse;
     }
 
-    .invoice-table th, .invoice-table td {
+    th, td {
       padding: 12px 14px;
       border-bottom: 1px solid var(--line);
       text-align: right;
@@ -525,22 +544,23 @@
       white-space: nowrap;
     }
 
-    .invoice-table th:first-child, .invoice-table td:first-child {
+    th:first-child, td:first-child {
       text-align: left;
       white-space: normal;
     }
 
-    .invoice-table th {
+    th {
       color: var(--muted);
       background: var(--soft);
       font-size: 0.76rem;
       text-transform: uppercase;
     }
 
-    .invoice-table td { font-size: 0.93rem; }
+    td { font-size: 0.93rem; }
     .debit { color: #a55b00; font-weight: 900; }
     .credit { color: var(--brand-blue); font-weight: 900; }
     .info { color: var(--brand-blue); font-weight: 900; }
+    .orange-text { color: #a55b00; font-weight: 900; }
 
     .toast {
       min-height: 22px;
@@ -550,391 +570,451 @@
       font-weight: 900;
     }
 
-    /* Rodapé Corporativo */
-    .pdf-footer {
-      width: 100%;
-      padding: 12px 0;
-      border-top: 1px solid var(--line);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: var(--muted);
-      font-size: 0.75rem;
-      margin-top: 20px;
-    }
-
     @media (max-width: 1020px) {
       .layout { grid-template-columns: 1fr; }
       .panel { position: static; }
       .cards, .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .proposal-header { grid-template-columns: 1fr; }
+      .client-box { justify-self: start; text-align: left; }
+      .service-title { align-items: stretch; flex-direction: column; }
     }
 
     @media (max-width: 680px) {
-      .app { width: calc(100% - 20px); padding-top: 10px; }
-      .topbar { flex-direction: column; align-items: stretch; }
+      .app { width: min(100% - 20px, 1220px); padding-top: 10px; }
+      .topbar, .invoice-header, .chart-head { align-items: stretch; flex-direction: column; }
       .actions { justify-content: stretch; }
       .button { flex: 1 1 auto; }
       .cards, .metrics, .summary, .two-cols, .bars { grid-template-columns: 1fr; }
+      .bars { min-height: 560px; }
+      .total-box { text-align: left; }
       .invoice { overflow-x: auto; }
+      th, td { padding: 10px; }
     }
 
-    /* Estilos estritos de Impressão PDF */
     @media print {
-      body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { background: #fff; }
       .app { width: 100%; padding: 0; }
-      .panel, .actions, .topbar { display: none !important; }
+      .panel, .actions, #bloqueio-senha { display: none !important; }
       .layout { display: block; }
-      .proposal-header { background: #12459f !important; color: #fff !important; }
-      .proposal-header::after { display: none; }
-      .card, .chart-panel, .invoice { box-shadow: none !important; break-inside: avoid; }
-      .cards { grid-template-columns: repeat(4, 1fr) !important; margin: 14px 0; }
-      .bars { background: none !important; }
+      .topbar, .proposal-header, .service-title, .invoice, .card, .chart-panel { box-shadow: none; }
+      .topbar, .invoice-header {
+        background: var(--brand-blue) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .cards { grid-template-columns: repeat(4, 1fr); margin: 14px 0; }
+      .card { break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
   </style>
+
+  <script>
+    const SENHA_ACESSO = "123456"; // ALTERE A SUA SENHA AQUI
+
+    function validarAcesso() {
+      let tentativa = prompt("Por favor, introduza o código de acesso para visualizar o Simulador:");
+      
+      if (tentativa === SENHA_ACESSO) {
+        // Se acertar, remove a camada preta e exibe o site
+        document.getElementById("bloqueio-senha").style.display = "none";
+      } else {
+        alert("Código incorreto! Acesso não autorizado.");
+        window.location.reload(); 
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", validarAcesso);
+  </script>
 </head>
 <body>
 
-  <table class="print-layout">
-    <thead>
-      <tr>
-        <td>
-          <main class="app" style="padding-bottom: 0;">
-            <header class="topbar">
-              <div class="brand">
-                <div class="logo-box">
-                  <img id="legacyBrandLogoImage" alt="Logo da empresa" hidden>
-                  <svg class="logo" id="legacyBrandLogoDefault" viewBox="0 0 64 64">
-                    <rect width="64" height="64" rx="10" fill="#ffffff"></rect>
-                    <path d="M14 40c10-20 22-24 36-22-5 3-9 7-12 12 5-1 9-1 14 0-9 4-17 10-25 20 1-8 3-14 7-20-8 2-14 5-20 10z" fill="#f69009"></path>
-                    <path d="M12 48h40v5H12zM12 11h40v5H12z" fill="#12459f"></path>
-                  </svg>
-                </div>
-                <div>
-                  <h1>Simulador de Fatura</h1>
-                  <p class="subtitle">Análise de viabilidade e tarifária para consumidores do Grupo B</p>
-                </div>
-              </div>
-              <div class="actions">
-                <button class="button" id="legacyPdfButton" type="button">Exportar PDF</button>
-              </div>
-            </header>
+  <div id="bloqueio-senha">
+    <h2>Carregando Simulador Seguro...</h2>
+  </div>
 
-            <section class="proposal-header">
-              <div class="proposal-info">
-                <div class="logo-box">
-                  <img id="proposalLogoImage" alt="Logo da empresa" hidden>
-                  <svg class="logo" id="proposalLogoDefault" viewBox="0 0 64 64">
-                    <rect width="64" height="64" rx="10" fill="#ffffff"></rect>
-                    <path d="M14 40c10-20 22-24 36-22-5 3-9 7-12 12 5-1 9-1 14 0-9 4-17 10-25 20 1-8 3-14 7-20-8 2-14 5-20 10z" fill="#f69009"></path>
-                    <path d="M12 48h40v5H12zM12 11h40v5H12z" fill="#12459f"></path>
-                  </svg>
-                </div>
-                <div class="proposal-text">
-                  <strong id="companyNameDisplay">Sua empresa solar</strong>
-                  <span id="companyDocDisplay">Responsável /Representante</span>
-                  <span id="companyContactDisplay">Contato comercial</span>
-                </div>
-              </div>
-              <div class="client-box">
-                <span>Análise preparada para</span>
-                <strong id="clientNameDisplay">Nome do cliente</strong>
-                <span>Valores referentes à competência de 05/2026</span>
-              </div>
-            </section>
-          </main>
-        </td>
-      </tr>
-    </thead>
+  <main class="app">
+    <header class="topbar" style="display: flex;">
+      <div class="brand">
+        <div class="logo-box">
+          <img id="legacyBrandLogoImage" alt="Logo da empresa" hidden>
+          <svg class="logo" id="legacyBrandLogoDefault" viewBox="0 0 64 64" role="img" aria-label="Logo GD2 B">
+            <rect width="64" height="64" rx="10" fill="#ffffff"></rect>
+            <path d="M14 40c10-20 22-24 36-22-5 3-9 7-12 12 5-1 9-1 14 0-9 4-17 10-25 20 1-8 3-14 7-20-8 2-14 5-20 10z" fill="#f69009"></path>
+            <path d="M12 48h40v5H12zM12 11h40v5H12z" fill="#12459f"></path>
+          </svg>
+        </div>
+        <div>
+          <h1>Simulador de Fatura GD2 B</h1>
+          <p class="subtitle">Comparativo simples entre fatura com energia solar e fatura sem energia solar</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="button secondary" id="legacySaveButton" type="button">Salvar simulação</button>
+        <button class="button" id="legacyPdfButton" type="button">Exportar PDF</button>
+      </div>
+    </header>
 
-    <tbody>
-      <tr>
-        <td>
-          <main class="app" style="padding-top: 0; padding-bottom: 0;">
-            <div class="layout">
-              <aside class="panel">
-                <h2 class="section-title">Cabeçalho para PDF</h2>
-                <form class="form-grid" id="headerForm">
-                  <label>
-                    Nome da empresa
-                    <input id="companyName" type="text" value="Sua empresa solar">
-                  </label>
-                  <div class="two-cols">
-                    <label>
-                      Responsável/Representante
-                      <input id="companyDoc" type="text" value="">
-                    </label>
-                    <label>
-                      Contato
-                      <input id="companyContact" type="text" value="">
-                    </label>
-                  </div>
-                  <label>
-                    Nome do Cliente
-                    <input id="clientName" type="text" value="Nome do cliente">
-                  </label>
-                  <div class="upload-row">
-                    <div class="logo-preview" id="logoPreview">Logo</div>
-                    <label>
-                      Logo da Empresa
-                      <input id="logoUpload" type="file" accept="image/*">
-                    </label>
-                  </div>
-                </form>
+    <section class="proposal-header" aria-label="Cabeçalho da proposta">
+      <div class="proposal-info">
+        <div class="logo-box">
+          <img id="proposalLogoImage" alt="Logo da empresa" hidden>
+          <svg class="logo" id="proposalLogoDefault" viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" rx="10" fill="#ffffff"></rect>
+            <path d="M14 40c10-20 22-24 36-22-5 3-9 7-12 12 5-1 9-1 14 0-9 4-17 10-25 20 1-8 3-14 7-20-8 2-14 5-20 10z" fill="#f69009"></path>
+            <path d="M12 48h40v5H12zM12 11h40v5H12z" fill="#12459f"></path>
+          </svg>
+        </div>
+        <div class="proposal-text">
+          <strong id="companyNameDisplay">Sua empresa solar</strong>
+          <span id="companyDocDisplay">Responsável</span>
+          <span id="companyContactDisplay">Contato comercial</span>
+        </div>
+      </div>
+      <div class="client-box">
+        <span>Cliente</span>
+        <strong id="clientNameDisplay">Nome do cliente</strong>
+        <span>valores referentes a uma fatura de grupo B de 05/26</span>
+      </div>
+    </section>
 
-                <h2 class="section-title" style="margin-top: 14px;">Dados da fatura</h2>
-                <form class="form-grid" id="simForm">
-                  <label>
-                    Consumo total sem energia solar (kWh)
-                    <input id="gridConsumption" type="number" min="0" step="0.01" value="">
-                  </label>
-                  <label>
-                    Geração solar no período (kWh)
-                    <input id="generation" type="number" min="0" step="0.01" value="">
-                  </label>
-                  <div class="two-cols">
-                    <label>
-                      Taxa de simultaneidade (%)
-                      <input id="simultaneity" type="number" min="0" max="100" step="0.01" value="0">
-                    </label>
-                    <label>
-                      Saldo acumulado anterior (kWh)
-                      <input id="previousCredit" type="number" min="0" step="0.01" value="">
-                    </label>
-                  </div>
-                  <div class="two-cols">
-                    <label>
-                      Iluminação pública / CIP (R$)
-                      <input id="cip" type="number" min="0" step="0.01" value="">
-                    </label>
-                    <label>
-                      Tipo de ligação
-                      <select id="connection">
-                        <option value="mono">Monofásica</option>
-                        <option value="bi">Bifásica</option>
-                        <option value="tri" selected>Trifásica</option>
-                      </select>
-                    </label>
-                  </div>
-                  <p class="hint">A simultaneidade reduz o consumo direto instantaneamente. O excedente é injetado gerando créditos.</p>
+    <div class="layout">
+      <aside class="panel" aria-label="Entradas da simulação">
+        <h2 class="section-title">Cabeçalho para PDF</h2>
+        <form class="form-grid" id="headerForm">
+          <label>
+            Nome da empresa
+            <input id="companyName" type="text" value="Sua empresa solar">
+          </label>
+          <div class="two-cols">
+            <label>
+              CNPJ / documento
+              <input id="companyDoc" type="text" value="">
+            </label>
+            <label>
+              Contato
+              <input id="companyContact" type="text" value="">
+            </label>
+          </div>
+          <label>
+            Nome do cliente
+            <input id="clientName" type="text" value="Nome do cliente">
+          </label>
+          <div class="upload-row">
+            <div class="logo-preview" id="logoPreview">Logo</div>
+            <label>
+              Logo da empresa
+              <input id="logoUpload" type="file" accept="image/*">
+            </label>
+          </div>
+        </form>
 
-                  <h2 class="section-title" style="margin-top: 12px;">Tarifas (05/2026)</h2>
-                  <div class="two-cols">
-                    <label>
-                      TE fornecida
-                      <input id="teProvided" type="number" min="0" step="0.00001" value="0.34716">
-                    </label>
-                    <label>
-                      TUSD fornecida
-                      <input id="tusdProvided" type="number" min="0" step="0.00001" value="0.65017">
-                    </label>
-                  </div>
+        <h2 class="section-title">Dados da fatura</h2>
+        <form class="form-grid" id="simForm">
+          <label>
+            Consumo total sem energia solar (kWh)
+            <input id="gridConsumption" type="number" min="0" step="0.01" value="">
+          </label>
+          <label>
+            Geração solar no período (kWh)
+            <input id="generation" type="number" min="0" step="0.01" value="">
+          </label>
+          <div class="two-cols">
+            <label>
+              Taxa de simultaneidade (%)
+              <input id="simultaneity" type="number" min="0" max="100" step="0.01" value="0">
+            </label>
+            <label>
+              Saldo acumulado anterior (kWh)
+              <input id="previousCredit" type="number" min="0" step="0.01" value="">
+            </label>
+          </div>
+          <div class="two-cols">
+            <label>
+              Iluminação pública / CIP (R$)
+              <input id="cip" type="number" min="0" step="0.01" value="200">
+            </label>
+            <label>
+              Tipo de ligação
+              <select id="connection">
+                <option value="mono">Monofásica</option>
+                <option value="bi">Bifásica</option>
+                <option value="tri" selected>Trifásica</option>
+              </select>
+            </label>
+          </div>
+          <p class="hint">A taxa de simultaneidade representa a parcela da geração usada na hora. Essa energia reduz o consumo antes da fatura; o restante vira energia injetada e pode gerar ou usar créditos.</p>
 
-                  <h2 class="section-title" style="margin-top: 12px;">Regra GD2 e Impostos</h2>
-                  <div class="two-cols">
-                    <label>
-                      Fio B (R$/MWh)
-                      <input id="fioB" type="number" min="0" step="0.01" value="283.71">
-                    </label>
-                    <label>
-                      Percentual Fio B (%)
-                      <input id="fioBPercent" type="number" min="0" max="100" step="0.01" value="60">
-                    </label>
-                  </div>
-                  <div class="two-cols">
-                    <label>
-                      ICMS s/ TUSD (%)
-                      <input id="icms" type="number" min="0" max="100" step="0.01" value="20">
-                    </label>
-                    <label>
-                      PIS/COFINS (%)
-                      <input id="pisCofins" type="number" min="0" max="100" step="0.01" value="5">
-                    </label>
-                  </div>
-                  <label>
-                    TE compensada
-                    <input id="teCompensated" type="number" min="0" step="0.00001" value="0.33771">
-                  </label>
-                </form>
-                <div class="toast" id="toast"></div>
-              </aside>
+          <h2 class="section-title" style="margin-top: 8px;">Tarifas da fatura 05/2026</h2>
+          <div class="two-cols">
+            <label>
+              TE fornecida
+              <input id="teProvided" type="number" min="0" step="0.00001" value="0.34716">
+            </label>
+            <label>
+              TUSD fornecida
+              <input id="tusdProvided" type="number" min="0" step="0.00001" value="0.65017">
+            </label>
+          </div>
+          <div class="two-cols">
+            <label>
+              Bandeira amarela (R$/kWh)
+              <input id="yellowFlag" type="number" min="0" step="0.00001" value="0.01901">
+            </label>
+            <label>
+              Bandeira vermelha (R$/kWh)
+              <input id="redFlag" type="number" min="0" step="0.00001" value="0">
+            </label>
+          </div>
 
-              <section class="content">
-                <div class="cards">
-                  <article class="card green">
-                    <span class="label">Com Energia Solar</span>
-                    <strong class="value" id="billWithSolarCard">R$ 0,00</strong>
-                    <span class="meta">Fatura mensal estimada</span>
-                  </article>
-                  <article class="card red">
-                    <span class="label">Sem Energia Solar</span>
-                    <strong class="value" id="billWithoutSolarCard">R$ 0,00</strong>
-                    <span class="meta">Custo sem investimento</span>
-                  </article>
-                  <article class="card orange">
-                    <span class="label">Economia Mensal</span>
-                    <strong class="value" id="monthlySavingsCard">R$ 0,00</strong>
-                    <span class="meta" id="savingPercentMeta">0% de redução</span>
-                  </article>
-                  <article class="card blue">
-                    <span class="label">Ativo Acumulado</span>
-                    <strong class="value" id="accumulatedCreditCard">0 kWh</strong>
-                    <span class="meta">Saldo para meses futuros</span>
-                  </article>
-                </div>
+          <h2 class="section-title" style="margin-top: 8px;">Regra GD2 da TUSD compensada</h2>
+          <div class="two-cols">
+            <label>
+              Fio B (R$/MWh)
+              <input id="fioB" type="number" min="0" step="0.01" value="283.71">
+            </label>
+            <label>
+              Percentual Fio B GD2 (%)
+              <input id="fioBPercent" type="number" min="0" max="100" step="0.01" value="60">
+            </label>
+          </div>
+          <div class="two-cols">
+            <label>
+              ICMS sobre TUSD (%)
+              <input id="icms" type="number" min="0" max="100" step="0.01" value="20">
+            </label>
+            <label>
+              PIS/COFINS sobre TUSD (%)
+              <input id="pisCofins" type="number" min="0" max="100" step="0.01" value="5">
+            </label>
+          </div>
+          <label>
+            TE compensada
+            <input id="teCompensated" type="number" min="0" step="0.00001" value="0.33771">
+          </label>
+        </form>
+        <div class="toast" id="toast" aria-live="polite"></div>
+      </aside>
 
-                <section class="chart-panel">
-                  <div class="chart-head">
-                    <div>
-                      <h2 class="section-title" style="margin-bottom: 2px;">Balanço Energético</h2>
-                      <span style="color: var(--muted); font-size: 0.85rem;">Valores expressos e proporcionais em kWh</span>
-                    </div>
-                    <span class="pill" id="tusdCompPill">TUSD GD2: R$ 0,00000</span>
-                  </div>
+      <section class="content">
+        <section class="solar-visual" aria-label="Ilustração de sistema de energia solar">
+          <svg viewBox="0 0 900 260" role="img" aria-label="Painéis solares, inversor e sol">
+            <defs>
+              <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#dff0ff"></stop>
+                <stop offset="100%" stop-color="#fff8e9"></stop>
+              </linearGradient>
+              <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#12459f"></stop>
+                <stop offset="100%" stop-color="#07295f"></stop>
+              </linearGradient>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#12459f" flood-opacity="0.18"></feDropShadow>
+              </filter>
+            </defs>
+            <rect width="900" height="260" fill="url(#sky)"></rect>
+            <circle cx="752" cy="58" r="34" fill="#f69009"></circle>
+            <g stroke="#f69009" stroke-width="5" stroke-linecap="round" opacity="0.75">
+              <path d="M752 8v22"></path><path d="M752 86v22"></path><path d="M702 58h22"></path><path d="M780 58h22"></path>
+              <path d="M716 22l15 15"></path><path d="M773 79l15 15"></path><path d="M788 22l-15 15"></path><path d="M731 79l-15 15"></path>
+            </g>
+            <path d="M0 205c110-38 190-42 300-8 117 37 222 39 343 0 97-31 174-29 257 2v61H0z" fill="#d8ead7"></path>
+            <path d="M0 222c112-28 212-25 320 2 121 30 248 28 379-6 72-19 138-19 201 3v39H0z" fill="#bfdcc1"></path>
+            <g filter="url(#softShadow)">
+              <g transform="translate(78 118) skewX(-17)">
+                <rect x="0" y="0" width="310" height="92" rx="8" fill="url(#panel)"></rect>
+                <g stroke="#7db2ff" stroke-width="2" opacity="0.75">
+                  <path d="M52 0v92"></path><path d="M104 0v92"></path><path d="M156 0v92"></path><path d="M208 0v92"></path><path d="M260 0v92"></path>
+                  <path d="M0 30h310"></path><path d="M0 61h310"></path>
+                </g>
+              </g>
+              <g transform="translate(405 132) skewX(-17)">
+                <rect x="0" y="0" width="210" height="78" rx="8" fill="url(#panel)"></rect>
+                <g stroke="#7db2ff" stroke-width="2" opacity="0.75">
+                  <path d="M52 0v78"></path><path d="M104 0v78"></path><path d="M156 0v78"></path>
+                  <path d="M0 26h210"></path><path d="M0 52h210"></path>
+                </g>
+              </g>
+            </g>
+            <g transform="translate(635 130)" filter="url(#softShadow)">
+              <rect width="104" height="74" rx="8" fill="#ffffff" stroke="#c8d6e8"></rect>
+              <rect x="15" y="16" width="74" height="16" rx="4" fill="#12459f"></rect>
+              <path d="M22 50c13-18 25 18 38 0s25 18 38 0" fill="none" stroke="#f69009" stroke-width="4" stroke-linecap="round"></path>
+              <text x="52" y="67" text-anchor="middle" font-family="Arial" font-size="11" font-weight="700" fill="#12459f">INVERSOR</text>
+            </g>
+            <g fill="none" stroke="#f69009" stroke-width="4" stroke-linecap="round" stroke-dasharray="9 9" opacity="0.9">
+              <path d="M596 174c34 0 45-7 69-28"></path>
+              <path d="M738 162c38-22 62-48 75-88"></path>
+            </g>
+          </svg>
+        </section>
 
-                  <div class="bars">
-                    <div class="bar-wrap">
-                      <div class="bar-value" id="gridBarValue">0</div>
-                      <div class="bar consumption" id="gridBar"></div>
-                      <div class="bar-label">Consumo Total</div>
-                    </div>
-                    <div class="bar-wrap">
-                      <div class="bar-value" id="generationBarValue">0</div>
-                      <div class="bar generation" id="generationBar"></div>
-                      <div class="bar-label">Geração Solar</div>
-                    </div>
-                    <div class="bar-wrap">
-                      <div class="bar-value" id="compensatedBarValue">0</div>
-                      <div class="bar invoice" id="compensatedBar"></div>
-                      <div class="bar-label">Compensado</div>
-                    </div>
-                  </div>
+        <div class="cards" aria-label="Indicadores principais">
+          <article class="card green">
+            <span class="label">Valor final com energia solar</span>
+            <strong class="value" id="billWithSolarCard">R$ 0,00</strong>
+            <span class="meta">Fatura estimada após compensação GD2</span>
+          </article>
+          <article class="card red">
+            <span class="label">Valor final sem energia solar</span>
+            <strong class="value" id="billWithoutSolarCard">R$ 0,00</strong>
+            <span class="meta">Quanto seria pago sem o sistema solar</span>
+          </article>
+          <article class="card orange">
+            <span class="label">Economia no mês</span>
+            <strong class="value" id="monthlySavingsCard">R$ 0,00</strong>
+            <span class="meta" id="savingPercentMeta">0% de economia</span>
+          </article>
+          <article class="card blue">
+            <span class="label">Saldo acumulado</span>
+            <strong class="value" id="accumulatedCreditCard">0 kWh</strong>
+            <span class="meta">Créditos de energia após esta fatura</span>
+          </article>
+        </div>
 
-                  <div class="metrics">
-                    <div class="metric">
-                      <span>Autoconsumo Direto</span>
-                      <strong id="selfConsumption">0 kWh</strong>
-                    </div>
-                    <div class="metric">
-                      <span>Injetada na Rede</span>
-                      <strong id="injectedEnergy">0 kWh</strong>
-                    </div>
-                    <div class="metric">
-                      <span>Energia Abatida</span>
-                      <strong id="compensatedEnergy">0 kWh</strong>
-                    </div>
-                    <div class="metric">
-                      <span>Faturamento Concessionária</span>
-                      <strong id="minimumEnergy">0 kWh</strong>
-                    </div>
-                  </div>
-                </section>
-
-                <section class="invoice">
-                  <div class="invoice-header">
-                    <div>
-                      <h2>Demonstrativo de Resultados Financeiros</h2>
-                      <p>Grupo B • Análise Tarifária Detalhada</p>
-                    </div>
-                    <div class="total-box">
-                      <span>Custo com Solar</span>
-                      <strong id="invoiceFinal">R$ 0,00</strong>
-                    </div>
-                  </div>
-
-                  <table class="invoice-table">
-                    <thead>
-                      <tr>
-                        <th>Componente da Fatura</th>
-                        <th>Quantidade</th>
-                        <th>Tarifa Base</th>
-                        <th>Subtotal</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Energia Consumida da Rede - TE</td>
-                        <td id="rowTeProvidedQty">0 kWh</td>
-                        <td id="rowTeProvidedRate">R$ 0,00000</td>
-                        <td class="debit" id="rowTeProvidedValue">R$ 0,00</td>
-                      </tr>
-                      <tr>
-                        <td>Energia Consumida da Rede - TUSD</td>
-                        <td id="rowTusdProvidedQty">0 kWh</td>
-                        <td id="rowTusdProvidedRate">R$ 0,00000</td>
-                        <td class="debit" id="rowTusdProvidedValue">R$ 0,00</td>
-                      </tr>
-                      <tr>
-                        <td>Crédito Solar Compensado - TE</td>
-                        <td id="rowTeCompQty">0 kWh</td>
-                        <td id="rowTeCompRate">R$ 0,00000</td>
-                        <td class="credit" id="rowTeCompValue">-R$ 0,00</td>
-                      </tr>
-                      <tr>
-                        <td>Crédito Solar Compensado - TUSD GD2</td>
-                        <td id="rowTusdCompQty">0 kWh</td>
-                        <td id="rowTusdCompRate">R$ 0,00000</td>
-                        <td class="credit" id="rowTusdCompValue">-R$ 0,00</td>
-                      </tr>
-                      <tr>
-                        <td>Contribuição de Iluminação Pública (CIP)</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td class="info" id="rowCip">R$ 0,00</td>
-                      </tr>
-                      <tr>
-                        <td><strong>Custo Final Estimado (Com Solar)</strong></td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td class="info" id="rowWithSolar"><strong>R$ 0,00</strong></td>
-                      </tr>
-                      <tr>
-                        <td><strong>Custo Histórico Equivalente (Sem Solar)</strong></td>
-                        <td id="rowWithoutSolarQty">0 kWh</td>
-                        <td>-</td>
-                        <td class="debit" id="rowWithoutSolar"><strong>R$ 0,00</strong></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  <div class="summary">
-                    <div class="summary-item">
-                      <span>Demanda Total</span>
-                      <strong id="totalCustomerConsumption">0 kWh</strong>
-                    </div>
-                    <div class="summary-item">
-                      <span>Custo de Disponibilidade</span>
-                      <strong id="availabilityKwh">0 kWh</strong>
-                    </div>
-                    <div class="summary-item">
-                      <span>Créditos Injetados Mês</span>
-                      <strong id="newCreditThisMonth">0 kWh</strong>
-                    </div>
-                    <div class="summary-item">
-                      <span>Eficiência do Sistema</span>
-                      <strong id="economyPercent">0%</strong>
-                    </div>
-                  </div>
-                </section>
-              </section>
+        <section class="chart-panel" aria-label="Comparativo energético">
+          <div class="chart-head">
+            <div>
+              <h2 class="section-title" style="margin-bottom: 4px;">Energia e compensação</h2>
+              <span style="color: var(--muted); font-size: 0.9rem;">Consumo total, geração solar e energia compensada em kWh</span>
             </div>
-          </main>
-        </td>
-      </tr>
-    </tbody>
+            <span class="pill" id="tusdCompPill">TUSD GD2: R$ 0,00000</span>
+          </div>
 
-    <tfoot>
-      <tr>
-        <td>
-          <footer class="app" style="padding-top: 0; padding-bottom: 10px;">
-            <div class="pdf-footer">
-              <span>Simulador Solar Pro • Relatório Técnico de Viabilidade Econômica</span>
-              <span>Página 1 de 1</span>
+          <div class="bars">
+            <div class="bar-wrap">
+              <div class="bar consumption" id="gridBar">0</div>
+              <div class="bar-label">Consumo total</div>
             </div>
-          </footer>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
+            <div class="bar-wrap">
+              <div class="bar generation" id="generationBar">0</div>
+              <div class="bar-label">Geração solar</div>
+            </div>
+            <div class="bar-wrap">
+              <div class="bar invoice" id="compensatedBar">0</div>
+              <div class="bar-label">Energia compensada</div>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <span>Energia consumida na hora</span>
+              <strong id="selfConsumption">0 kWh</strong>
+            </div>
+            <div class="metric">
+              <span>Energia injetada</span>
+              <strong id="injectedEnergy">0 kWh</strong>
+            </div>
+            <div class="metric">
+              <span>Energia compensada</span>
+              <strong id="compensatedEnergy">0 kWh</strong>
+            </div>
+            <div class="metric">
+              <span>Energia faturada pela Enel</span>
+              <strong id="minimumEnergy">0 kWh</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="invoice" aria-label="Quadro da fatura">
+          <div class="invoice-header">
+            <div>
+              <h2>Resultado da Simulação</h2>
+              <p>valores referentes a uma fatura de grupo B de 05/26</p>
+            </div>
+            <div class="total-box">
+              <span>Com energia solar</span>
+              <strong id="invoiceFinal">R$ 0,00</strong>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Descrição para o cliente</th>
+                <th>Quantidade</th>
+                <th>Tarifa</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Energia faturada pela Enel - TE</td>
+                <td id="rowTeProvidedQty">0 kWh</td>
+                <td id="rowTeProvidedRate">R$ 0,00000</td>
+                <td class="debit" id="rowTeProvidedValue">R$ 0,00</td>
+              </tr>
+              <tr>
+                <td>Energia faturada pela Enel - TUSD</td>
+                <td id="rowTusdProvidedQty">0 kWh</td>
+                <td id="rowTusdProvidedRate">R$ 0,00000</td>
+                <td class="debit" id="rowTusdProvidedValue">R$ 0,00</td>
+              </tr>
+              <tr>
+                <td>Bandeiras tarifárias sobre consumo</td>
+                <td id="rowFlagQty">0 kWh</td>
+                <td id="rowFlagRate">R$ 0,00000</td>
+                <td class="debit" id="rowFlagDebit">R$ 0,00</td>
+              </tr>
+              <tr>
+                <td>Crédito solar abatido - TE</td>
+                <td id="rowTeCompQty">0 kWh</td>
+                <td id="rowTeCompRate">R$ 0,00000</td>
+                <td class="credit" id="rowTeCompValue">-R$ 0,00</td>
+              </tr>
+              <tr>
+                <td>Crédito solar abatido - TUSD GD2</td>
+                <td id="rowTusdCompQty">0 kWh</td>
+                <td id="rowTusdCompRate">R$ 0,00000</td>
+                <td class="credit" id="rowTusdCompValue">-R$ 0,00</td>
+              </tr>
+              <tr>
+                <td>Crédito solar abatido - bandeiras</td>
+                <td id="rowFlagCompQty">0 kWh</td>
+                <td id="rowFlagCompRate">R$ 0,00000</td>
+                <td class="credit" id="rowFlagCredit">-R$ 0,00</td>
+              </tr>
+              <tr>
+                <td>Iluminação pública / CIP</td>
+                <td>-</td>
+                <td>-</td>
+                <td class="info" id="rowCip">R$ 0,00</td>
+              </tr>
+              <tr>
+                <td><strong>Valor final da fatura com energia solar</strong></td>
+                <td>-</td>
+                <td>-</td>
+                <td class="info" id="rowWithSolar"><strong>R$ 0,00</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Valor final da fatura sem energia solar</strong></td>
+                <td id="rowWithoutSolarQty">0 kWh</td>
+                <td>-</td>
+                <td class="debit" id="rowWithoutSolar"><strong>R$ 0,00</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="summary">
+            <div class="summary-item">
+              <span>Consumo total do cliente</span>
+              <strong id="totalCustomerConsumption">0 kWh</strong>
+            </div>
+            <div class="summary-item">
+              <span>Custo mínimo mantido</span>
+              <strong id="availabilityKwh">0 kWh</strong>
+            </div>
+            <div class="summary-item">
+              <span>Crédito gerado no mês</span>
+              <strong id="newCreditThisMonth">0 kWh</strong>
+            </div>
+            <div class="summary-item">
+              <span>Economia percentual</span>
+              <strong id="economyPercent">0%</strong>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  </main>
 
   <script>
     const availabilityByConnection = {
@@ -956,6 +1036,8 @@
       connection: document.getElementById('connection'),
       teProvided: document.getElementById('teProvided'),
       tusdProvided: document.getElementById('tusdProvided'),
+      yellowFlag: document.getElementById('yellowFlag'),
+      redFlag: document.getElementById('redFlag'),
       fioB: document.getElementById('fioB'),
       fioBPercent: document.getElementById('fioBPercent'),
       icms: document.getElementById('icms'),
@@ -964,24 +1046,37 @@
     };
 
     let companyLogoDataUrl = '';
+
     const out = {};
-    document.querySelectorAll('[id]').forEach((element) => { out[element.id] = element; });
+    document.querySelectorAll('[id]').forEach((element) => {
+      out[element.id] = element;
+    });
 
     const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
     const decimal = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    const tariff = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 5, maximumFractionDigits: 5 });
+    const tariff = new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 5,
+      maximumFractionDigits: 5
+    });
 
     function readNumber(input) {
       const value = Number(input.value);
       return Number.isFinite(value) && value >= 0 ? value : 0;
     }
 
-    function formatKwh(value) { return `${decimal.format(value)} kWh`; }
-    function formatPercent(value) { return `${decimal.format(value)}%`; }
+    function formatKwh(value) {
+      return `${decimal.format(value)} kWh`;
+    }
+
+    function formatPercent(value) {
+      return `${decimal.format(value)}%`;
+    }
 
     function updateHeader() {
       const companyName = fields.companyName.value.trim() || 'Sua empresa solar';
-      const companyDoc = fields.companyDoc.value.trim() || 'CNPJ / documento';
+      const companyDoc = fields.companyDoc.value.trim() || 'Responsável';
       const companyContact = fields.companyContact.value.trim() || 'Contato comercial';
       const clientName = fields.clientName.value.trim() || 'Nome do cliente';
 
@@ -996,8 +1091,13 @@
       const images = [out.legacyBrandLogoImage, out.proposalLogoImage];
       const defaults = [out.legacyBrandLogoDefault, out.proposalLogoDefault];
 
-      images.forEach((image) => { image.src = companyLogoDataUrl; image.hidden = !companyLogoDataUrl; });
-      defaults.forEach((logo) => { logo.hidden = Boolean(companyLogoDataUrl); });
+      images.forEach((image) => {
+        image.src = companyLogoDataUrl;
+        image.hidden = !companyLogoDataUrl;
+      });
+      defaults.forEach((logo) => {
+        logo.hidden = Boolean(companyLogoDataUrl);
+      });
 
       if (companyLogoDataUrl) {
         out.logoPreview.innerHTML = `<img src="${companyLogoDataUrl}" alt="Logo carregada">`;
@@ -1016,6 +1116,9 @@
       const connection = availabilityByConnection[fields.connection.value] || availabilityByConnection.tri;
       const teProvided = readNumber(fields.teProvided);
       const tusdProvided = readNumber(fields.tusdProvided);
+      const yellowFlag = readNumber(fields.yellowFlag);
+      const redFlag = readNumber(fields.redFlag);
+      const flagRate = yellowFlag + redFlag;
       const fioB = readNumber(fields.fioB);
       const fioBPercent = readNumber(fields.fioBPercent) / 100;
       const icms = readNumber(fields.icms) / 100;
@@ -1027,6 +1130,7 @@
       const energyFromGrid = Math.max(totalConsumptionWithoutSolar - selfConsumed, 0);
       const gridConsumption = Math.max(energyFromGrid, connection.kwh);
       const totalCustomerConsumption = totalConsumptionWithoutSolar;
+      const minimumKwh = Math.min(gridConsumption, connection.kwh);
       const billableForCompensation = Math.max(gridConsumption - connection.kwh, 0);
       const availableCredits = previousCredit + injected;
       const compensatedKwh = Math.min(billableForCompensation, availableCredits);
@@ -1039,10 +1143,12 @@
 
       const debitTE = gridConsumption * teProvided;
       const debitTUSD = gridConsumption * tusdProvided;
+      const debitFlags = gridConsumption * flagRate;
       const creditTE = compensatedKwh * teCompensated;
       const creditTUSD = compensatedKwh * tusdCompensated;
-      const billWithSolar = debitTE + debitTUSD - creditTE - creditTUSD + cip;
-      const billWithoutSolar = totalConsumptionWithoutSolar * (teProvided + tusdProvided) + cip;
+      const creditFlags = compensatedKwh * flagRate;
+      const billWithSolar = debitTE + debitTUSD + debitFlags - creditTE - creditTUSD - creditFlags + cip;
+      const billWithoutSolar = totalConsumptionWithoutSolar * (teProvided + tusdProvided + flagRate) + cip;
       const monthlySavings = billWithoutSolar - billWithSolar;
       const economyPercent = billWithoutSolar > 0 ? (monthlySavings / billWithoutSolar) * 100 : 0;
       const maxBar = Math.max(totalConsumptionWithoutSolar, generation, compensatedKwh, 1);
@@ -1052,16 +1158,14 @@
       out.monthlySavingsCard.textContent = money.format(monthlySavings);
       out.savingPercentMeta.textContent = `${formatPercent(economyPercent)} de economia`;
       out.accumulatedCreditCard.textContent = formatKwh(newAccumulatedCredit);
-      out.disabledFlagsCard ? null : out.tusdCompPill.textContent = `TUSD GD2: ${tariff.format(tusdCompensated)}`;
+      out.tusdCompPill.textContent = `TUSD GD2: ${tariff.format(tusdCompensated)}`;
 
-      // Atualização dos gráficos sem números embutidos dentro das barras para evitar o bug do 0
-      out.gridBar.style.height = `${(totalConsumptionWithoutSolar / maxBar) * 100}%`;
-      out.generationBar.style.height = `${(generation / maxBar) * 100}%`;
-      out.compensatedBar.style.height = `${(compensatedKwh / maxBar) * 100}%`;
-      
-      out.gridBarValue.textContent = decimal.format(totalConsumptionWithoutSolar);
-      out.generationBarValue.textContent = decimal.format(generation);
-      out.compensatedBarValue.textContent = decimal.format(compensatedKwh);
+      out.gridBar.style.height = `${Math.max((totalConsumptionWithoutSolar / maxBar) * 100, totalConsumptionWithoutSolar > 0 ? 4 : 0)}%`;
+      out.generationBar.style.height = `${Math.max((generation / maxBar) * 100, generation > 0 ? 4 : 0)}%`;
+      out.compensatedBar.style.height = `${Math.max((compensatedKwh / maxBar) * 100, compensatedKwh > 0 ? 4 : 0)}%`;
+      out.gridBar.textContent = decimal.format(totalConsumptionWithoutSolar);
+      out.generationBar.textContent = decimal.format(generation);
+      out.compensatedBar.textContent = decimal.format(compensatedKwh);
 
       out.selfConsumption.textContent = formatKwh(selfConsumed);
       out.injectedEnergy.textContent = formatKwh(injected);
@@ -1075,12 +1179,18 @@
       out.rowTusdProvidedQty.textContent = formatKwh(gridConsumption);
       out.rowTusdProvidedRate.textContent = tariff.format(tusdProvided);
       out.rowTusdProvidedValue.textContent = money.format(debitTUSD);
+      out.rowFlagQty.textContent = formatKwh(gridConsumption);
+      out.rowFlagRate.textContent = tariff.format(flagRate);
+      out.rowFlagDebit.textContent = money.format(debitFlags);
       out.rowTeCompQty.textContent = formatKwh(compensatedKwh);
       out.rowTeCompRate.textContent = tariff.format(teCompensated);
       out.rowTeCompValue.textContent = `-${money.format(creditTE)}`;
       out.rowTusdCompQty.textContent = formatKwh(compensatedKwh);
       out.rowTusdCompRate.textContent = tariff.format(tusdCompensated);
       out.rowTusdCompValue.textContent = `-${money.format(creditTUSD)}`;
+      out.rowFlagCompQty.textContent = formatKwh(compensatedKwh);
+      out.rowFlagCompRate.textContent = tariff.format(flagRate);
+      out.rowFlagCredit.textContent = `-${money.format(creditFlags)}`;
       out.rowCip.textContent = money.format(cip);
       out.rowWithSolar.innerHTML = `<strong>${money.format(billWithSolar)}</strong>`;
       out.rowWithoutSolarQty.textContent = formatKwh(totalCustomerConsumption);
@@ -1091,7 +1201,7 @@
       out.economyPercent.textContent = formatPercent(economyPercent);
     }
 
-Object.values(fields).forEach((field) => {
+    Object.values(fields).forEach((field) => {
       field.addEventListener('input', calculate);
       field.addEventListener('change', calculate);
     });
@@ -1101,13 +1211,9 @@ Object.values(fields).forEach((field) => {
       window.setTimeout(() => { out.toast.textContent = ''; }, 3500);
     });
 
-    // BOTÃO PDF CORRIGIDO: Garante a visibilidade e chama a impressão nativa
+    // BOTÃO DE IMPRESSÃO NATIVA SEM ALTERAR O VISUAL DO NAVEGADOR
     out.legacyPdfButton.addEventListener('click', () => {
-      // Força o documento a estar visível antes de mandar imprimir
-      document.documentElement.style.display = "block";
-      setTimeout(() => {
-        window.print();
-      }, 50);
+      window.print();
     });
 
     out.logoUpload.addEventListener('change', (event) => {
@@ -1118,7 +1224,6 @@ Object.values(fields).forEach((field) => {
       reader.readAsDataURL(file);
     });
 
-    // Executa o cálculo inicial assim que a senha é digitada corretamente
     calculate();
   </script>
 </body>
