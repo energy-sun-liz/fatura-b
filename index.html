@@ -4,13 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Simulador de Fatura GD2 B</title>
-<script>
-    // DEFINA A SUA SENHA EXCLUSIVA AQUI ABAIXO:
-    const SENHA_ACESSO = "1234"; 
 
+ <script>
+    // DEFINA A SUA SENHA EXCLUSIVA AQUI ABAIXO:
+    const SENHA_ACESSO = "1234";
     function validarAcesso() {
       let tentativa = prompt("Por favor, introduza o código de acesso para visualizar o Simulador:");
-      
       if (tentativa === SENHA_ACESSO) {
         // Se a senha estiver correta, torna o site visível
         document.documentElement.style.display = "block";
@@ -24,10 +23,9 @@
 
     // Oculta a página imediatamente antes de carregar o visual
     document.documentElement.style.display = "none";
-    
     // Dispara a verificação assim que a estrutura base estiver pronta
     window.addEventListener("DOMContentLoaded", validarAcesso);
-  </script>
+</script>
   <style>
     :root {
       color-scheme: light;
@@ -608,7 +606,7 @@
   </style>
 
   <script>
-    const SENHA_ACESSO = "123456"; // ALTERE A SUA SENHA AQUI
+    const SENHA_ACESSO = "1234"; // ALTERE A SUA SENHA AQUI
 
     function validarAcesso() {
       let tentativa = prompt("Por favor, introduza o código de acesso para visualizar o Simulador:");
