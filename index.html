@@ -5,27 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Simulador de Fatura GD2 B</title>
 
- <script>
-    // DEFINA A SUA SENHA EXCLUSIVA AQUI ABAIXO:
-    const SENHA_ACESSO = "1234";
-    function validarAcesso() {
-      let tentativa = prompt("Por favor, introduza o código de acesso para visualizar o Simulador:");
-      if (tentativa === SENHA_ACESSO) {
-        // Se a senha estiver correta, torna o site visível
-        document.documentElement.style.display = "block";
-      } else {
-        // Se estiver errada ou cancelada, bloqueia e avisa
-        alert("Código incorreto!");
-        document.documentElement.style.display = "none";
-        window.location.reload(); // Recarrega para pedir novamente
-      }
-    }
-
-    // Oculta a página imediatamente antes de carregar o visual
-    document.documentElement.style.display = "none";
-    // Dispara a verificação assim que a estrutura base estiver pronta
-    window.addEventListener("DOMContentLoaded", validarAcesso);
-</script>
   <style>
     :root {
       color-scheme: light;
@@ -58,7 +37,6 @@
 
     button, input, select { font: inherit; }
 
-    /* CAMADA DE PROTEÇÃO DA SENHA */
     #bloqueio-senha {
       position: fixed;
       top: 0;
@@ -389,8 +367,8 @@
 
     .card.green { border-left: 5px solid var(--brand-blue); background: linear-gradient(180deg, #fff, var(--blue-soft)); }
     .card.red { border-left: 5px solid var(--brand-orange); background: linear-gradient(180deg, #fff, #fff4e4); }
-    .card.blue { border-left: 5px solid var(--brand-blue); background: linear-gradient(180deg, #fff, var(--blue-soft)); }
     .card.orange { border-left: 5px solid var(--brand-orange); background: linear-gradient(180deg, #fff, #fff4e4); }
+    .card.blue { border-left: 5px solid var(--brand-blue); background: linear-gradient(180deg, #fff, var(--blue-soft)); }
 
     .chart-panel { padding: 18px; }
 
@@ -606,17 +584,15 @@
   </style>
 
   <script>
-    const SENHA_ACESSO = "1234"; // ALTERE A SUA SENHA AQUI
+    const SENHA_ACESSO = "1234";
 
     function validarAcesso() {
       let tentativa = prompt("Por favor, introduza o código de acesso para visualizar o Simulador:");
-      
       if (tentativa === SENHA_ACESSO) {
-        // Se acertar, remove a camada preta e exibe o site
         document.getElementById("bloqueio-senha").style.display = "none";
       } else {
         alert("Código incorreto! Acesso não autorizado.");
-        window.location.reload(); 
+        window.location.reload();
       }
     }
 
@@ -1020,7 +996,6 @@
       bi: { label: 'Bifásica', kwh: 50 },
       tri: { label: 'Trifásica', kwh: 100 }
     };
-
     const fields = {
       companyName: document.getElementById('companyName'),
       companyDoc: document.getElementById('companyDoc'),
@@ -1042,14 +1017,12 @@
       pisCofins: document.getElementById('pisCofins'),
       teCompensated: document.getElementById('teCompensated')
     };
-
     let companyLogoDataUrl = '';
 
     const out = {};
     document.querySelectorAll('[id]').forEach((element) => {
       out[element.id] = element;
     });
-
     const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
     const decimal = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     const tariff = new Intl.NumberFormat('pt-BR', {
@@ -1058,7 +1031,6 @@
       minimumFractionDigits: 5,
       maximumFractionDigits: 5
     });
-
     function readNumber(input) {
       const value = Number(input.value);
       return Number.isFinite(value) && value >= 0 ? value : 0;
@@ -1088,7 +1060,6 @@
       companyLogoDataUrl = dataUrl || '';
       const images = [out.legacyBrandLogoImage, out.proposalLogoImage];
       const defaults = [out.legacyBrandLogoDefault, out.proposalLogoDefault];
-
       images.forEach((image) => {
         image.src = companyLogoDataUrl;
         image.hidden = !companyLogoDataUrl;
@@ -1096,7 +1067,6 @@
       defaults.forEach((logo) => {
         logo.hidden = Boolean(companyLogoDataUrl);
       });
-
       if (companyLogoDataUrl) {
         out.logoPreview.innerHTML = `<img src="${companyLogoDataUrl}" alt="Logo carregada">`;
       } else {
@@ -1134,7 +1104,6 @@
       const compensatedKwh = Math.min(billableForCompensation, availableCredits);
       const newAccumulatedCredit = Math.max(availableCredits - compensatedKwh, 0);
       const newCreditThisMonth = Math.max(injected - compensatedKwh, 0);
-
       const fioBDeduction = (fioB / 1000) * fioBPercent;
       const taxDeduction = tusdProvided * (icms + pisCofins);
       const tusdCompensated = Math.max(tusdProvided - fioBDeduction - taxDeduction, 0);
@@ -1157,7 +1126,6 @@
       out.savingPercentMeta.textContent = `${formatPercent(economyPercent)} de economia`;
       out.accumulatedCreditCard.textContent = formatKwh(newAccumulatedCredit);
       out.tusdCompPill.textContent = `TUSD GD2: ${tariff.format(tusdCompensated)}`;
-
       out.gridBar.style.height = `${Math.max((totalConsumptionWithoutSolar / maxBar) * 100, totalConsumptionWithoutSolar > 0 ? 4 : 0)}%`;
       out.generationBar.style.height = `${Math.max((generation / maxBar) * 100, generation > 0 ? 4 : 0)}%`;
       out.compensatedBar.style.height = `${Math.max((compensatedKwh / maxBar) * 100, compensatedKwh > 0 ? 4 : 0)}%`;
@@ -1203,17 +1171,13 @@
       field.addEventListener('input', calculate);
       field.addEventListener('change', calculate);
     });
-
     out.legacySaveButton.addEventListener('click', () => {
       out.toast.textContent = 'Simulação processada com sucesso!';
       window.setTimeout(() => { out.toast.textContent = ''; }, 3500);
     });
-
-    // BOTÃO DE IMPRESSÃO NATIVA SEM ALTERAR O VISUAL DO NAVEGADOR
     out.legacyPdfButton.addEventListener('click', () => {
       window.print();
     });
-
     out.logoUpload.addEventListener('change', (event) => {
       const file = event.target.files && event.target.files[0];
       if (!file) { applyLogo(''); return; }
@@ -1221,7 +1185,6 @@
       reader.addEventListener('load', () => applyLogo(String(reader.result || '')));
       reader.readAsDataURL(file);
     });
-
     calculate();
   </script>
 </body>
