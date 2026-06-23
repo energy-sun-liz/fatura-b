@@ -1022,12 +1022,17 @@
       const tusdCompensated = Math.max(tusdProvided - fioBDeduction - taxDeduction, 0);
 
       const debitTE = gridConsumption * teProvided;
-      const debitTUSD = gridConsumption * tusdProvided;
-      const creditTE = compensatedKwh * teCompensated;
-      const creditTUSD = compensatedKwh * tusdCompensated;
-      const billWithSolar = debitTE + debitTUSD - creditTE - creditTUSD + cip;
-      const billWithoutSolar = totalConsumptionWithoutSolar * (teProvided + tusdProvided) + cip;
-      const monthlySavings = billWithoutSolar - billWithSolar;
+const debitTUSD = gridConsumption * tusdProvided;
+const creditTE = compensatedKwh * teCompensated;
+const creditTUSD = compensatedKwh * tusdCompensated;
+const billWithSolar = debitTE + debitTUSD - creditTE - creditTUSD + cip;
+
+// --- LINHAS CORRIGIDAS ABAIXO ---
+const consumptionWithoutSolarBillable = Math.max(totalConsumptionWithoutSolar, connection.kwh);
+const billWithoutSolar = consumptionWithoutSolarBillable * (teProvided + tusdProvided) + cip;
+// --------------------------------
+
+const monthlySavings = billWithoutSolar - billWithSolar;
       const economyPercent = billWithoutSolar > 0 ? (monthlySavings / billWithoutSolar) * 100 : 0;
       const maxBar = Math.max(totalConsumptionWithoutSolar, generation, compensatedKwh, 1);
 
